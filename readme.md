@@ -82,3 +82,10 @@ A demo of the web app can be found at: https://panam-demo.akshayxml.com
     rootDir: The directory containing the project files, typically set to dist. 
 
    Replace your-script-id with your specific script ID and <project-dir> with your project directory name.
+
+5. **Start Development:**
+   Create an empty `dist` folder in the project root and run the `npm run dev` script (or any other script defined in `package.json`) to get started.
+   ```bash
+   mkdir dist
+   npm run dev
+   ```
