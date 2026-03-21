@@ -46,7 +46,7 @@ A demo of the web app can be found at: https://panam-demo.akshayxml.com
    - Make a copy of the spreadsheet to your own Google Drive.
 2. Set Up the Cron:
    - Go to `Extensions` > `Apps Script`. 
-   - In the Apps Script editor, select `setupDailyCronTrigger` from the function dropdown (if not already selected). 
+   - In the Apps Script editor, select `setupTriggers` from the function dropdown. This will set up both the daily tracker and your monthly portfolio summary email.
    - Click on the Run button to execute the script. 
    - When prompted with the Authorization required dialog box, click on Review Permissions. 
    - Choose your Google account and grant the necessary permissions.

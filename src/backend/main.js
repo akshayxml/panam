@@ -4,9 +4,12 @@ const METADATA_PREFIX = '_'
 const REPORTS_PREFIX = '+'
 const IGNORE_PREFIX = '*'
 const COST_PER_DAY_SHEETNAME = "+costperday"
+const DAILY_TRACKER_SHEETNAME = "+dailytracker"
+const MONTHLY_SUMMARY_PDF_NAME = "Monthly_Summary.pdf"
 
 function setupTriggers(){
   setupDailyCronTrigger()
+  setupMonthlyCronTrigger()
 }
 
 function doGet() {
