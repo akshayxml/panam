@@ -14,6 +14,7 @@
    - [Prerequisites](#prerequisites)
    - [Installation](#installation)
    - [Getting Started with Development](#getting-started-with-development)
+- [AI Chatbot Configuration](#ai-chatbot-configuration)
 
 ## About
 Welcome to Panam! This web app built using Google Apps Script uses Google Sheets to help you manage and track your investments. It allows for easy visualization, performance analysis, and easy management of your investment portfolio, all while ensuring your data remains private and secure.
@@ -30,6 +31,7 @@ A demo of the web app can be found at: https://panam-demo.akshayxml.com
 - **Capital Gains Calculator:** Check out how much capital gains tax will be applied on each of your investment.
 - **Redemption Calculator:** Check how much money you will receive upon redeeming certain units, and how much your invested amount will decrease as a result.
 - **Cost-Per-Day Calculator:** Check out how much a product has cost you on a per-day basis.
+- **AI Portfolio Analyst:** A floating chatbot that uses Gemini API to provide insights on your portfolio data.
 
 ## Getting Started
 
@@ -64,10 +66,12 @@ A demo of the web app can be found at: https://panam-demo.akshayxml.com
    Clone the project repository to your local machine.
    ```bash
    git clone https://github.com/akshayxml/panam
+   ```
 2. **Install clasp:**  
    Install clasp for command-line development of Google Apps Script.
    ```bash
    npm install -g @google/clasp
+   ```
 3. **Run `clasp login`**  
 4. **Create `.clasp.json`:**
 
@@ -89,3 +93,11 @@ A demo of the web app can be found at: https://panam-demo.akshayxml.com
    mkdir dist
    npm run dev
    ```
+
+## AI Chatbot Configuration
+The application includes an AI Portfolio Analyst powered by the Gemini API. To enable it in your deployment:
+1. Obtain a Gemini API key from Google AI Studio.
+2. Open the Apps Script editor for your project.
+3. Go to **Project Settings** (gear icon).
+4. Scroll down to **Script Properties**.
+5. Add a property with name `AI_API_KEY` and paste your API key as the value.

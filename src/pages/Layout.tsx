@@ -7,6 +7,7 @@ import React, {useState} from "react";
 import Loading from "../components/Loading";
 import Settings from "../components/Settings";
 import Dialog from "../components/dialog/Dialog";
+import Chatbot from "../components/Chatbot";
 
 const Layout = ({ data,
     fetchSheetData,
@@ -81,6 +82,7 @@ const Layout = ({ data,
                 </div>
             </div>
             <Footer/>
+            <Chatbot />
         </div>
     )
 }
