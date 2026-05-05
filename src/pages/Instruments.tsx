@@ -63,6 +63,18 @@ const Instruments = ({
 
     const dataTypeMap = getDataTypeMap(columnMetadata)
 
+    const dateColumnName = useMemo(() => {
+        if (!dataTypeMap) return null;
+        return Object.keys(dataTypeMap).find(key => key.toLowerCase() === 'date');
+    }, [dataTypeMap]);
+
+    const initialSortModel = useMemo(() => {
+        if (dateColumnName) {
+            return [{ field: dateColumnName, sort: 'desc' as const }];
+        }
+        return [];
+    }, [dateColumnName]);
+
     const rows: GridRowsProp[] = transactionsRowMap[instrument]
 
     const headers = headerMap[instrument] ? headerMap[instrument].map(String) : [];
@@ -119,6 +131,7 @@ const Instruments = ({
                 </div>
             </div>
             <DataGrid
+                key={instrument}
                 rows={rows}
                 columns={columns}
                 classes={{
@@ -127,6 +140,9 @@ const Instruments = ({
                 initialState={{
                     pagination: {
                         paginationModel: { pageSize: 5, page: 0 },
+                    },
+                    sorting: {
+                        sortModel: initialSortModel,
                     }
                 }}
                 columnVisibilityModel={columnVisibility}
