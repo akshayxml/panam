@@ -14,6 +14,14 @@ function arrayToObjects(arr) {
 }
 
 function getAIChatResponse(prompt) {
+  const env = PropertiesService.getScriptProperties().getProperty('ENV');
+  if (env === 'development') {
+    return {
+      statusCode: 200,
+      text: `Mock Response (Development Mode): Hello! I am your AI assistant. I am currently running in development mode. Your prompt was: "${prompt}"`
+    };
+  }
+
   const apiKey = PropertiesService.getScriptProperties().getProperty('AI_API_KEY');
 
   if (!apiKey) {

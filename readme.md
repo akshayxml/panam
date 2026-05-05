@@ -101,3 +101,4 @@ The application includes an AI Portfolio Analyst powered by the Gemini API. To e
 3. Go to **Project Settings** (gear icon).
 4. Scroll down to **Script Properties**.
 5. Add a property with name `AI_API_KEY` and paste your API key as the value.
+6. (Optional) For local development or to use placeholder responses without a live API key, add a property with the name `ENV` and set its value to `development`. When `ENV` is set to `development`, the AI analyst will return a placeholder mock response.
