@@ -130,3 +130,23 @@
     }
   }
 }
+
+.form-page.full-width-page {
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 15px;
+
+  .form-page-title {
+    flex: none;
+    height: auto;
+    align-items: flex-start;
+    justify-content: flex-start;
+    margin-bottom: 5px;
+    font-size: 24px;
+  }
+
+  .form.calculator-form {
+    width: 100%;
+    max-width: 100%;
+  }
+}

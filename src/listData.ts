@@ -23,27 +23,27 @@ export const menu = [
         listItems: [
             {
                 id: 1,
+                title: "SIP Calculator",
+                url: "/calculator/sip",
+                icon: "arrowscope",
+            },
+            {
+                id: 2,
                 title: "Capital Gains",
                 url: "/calculator/capitalgains",
                 icon: "_uparrowright",
             },
             {
-                id: 2,
+                id: 3,
                 title: "Redemption",
                 url: "/calculator/redemption",
                 icon: "_redeem",
             },
             {
-                id: 3,
+                id: 4,
                 title: "Cost Per Day",
                 url: "/calculator/costperday",
                 icon: "_calendar",
-            },
-            {
-                id: 4,
-                title: "SIP Calculator",
-                url: "/calculator/sip",
-                icon: "plant",
             },
         ],
     },

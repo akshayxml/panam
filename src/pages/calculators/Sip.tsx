@@ -147,7 +147,7 @@ const Sip = ({ aggregatedData }: SipProps) => {
     };
 
     return (
-        <div className="form-page">
+        <div className="form-page full-width-page">
             <div className="form-page-title">
                 SIP Calculator
             </div>

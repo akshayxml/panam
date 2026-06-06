@@ -10,6 +10,7 @@ import { MdElderly } from "react-icons/md";
 import { PiImageBrokenThin } from "react-icons/pi";
 import { MdRedeem } from "react-icons/md";
 import { FaCalendarDay } from "react-icons/fa";
+import { GiArrowScope } from "react-icons/gi";
 
 export const iconMap = {
     "_overview": <GrOverview/>,
@@ -36,4 +37,5 @@ export const iconMap = {
     "home": <FaHome/>,
     "elderly": <MdElderly/>,
     "medical": <FaHandHoldingMedical/>,
+    "arrowscope": <GiArrowScope />,
 };
