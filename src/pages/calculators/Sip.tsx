@@ -33,7 +33,7 @@ const Sip = ({ aggregatedData }: SipProps) => {
         const pStepUp = parseFloat(stepUp as any) || 0;
         const pLumpSum = usePortfolio ? portfolioValue : (parseFloat(lumpSumInput as any) || 0);
 
-        const monthlyRate = pRoi / 12 / 100;
+        const monthlyRate = Math.pow(1 + pRoi / 100, 1 / 12) - 1;
         let balance = pLumpSum;
         let totalInvested = pLumpSum;
 
