@@ -13,6 +13,7 @@ import DeleteInstrument from './pages/DeleteInstrument';
 import CapitalGains from './pages/calculators/CapitalGains';
 import Redemption from './pages/calculators/Redemption';
 import CostPerDay from './pages/calculators/CostPerDay';
+import Sip from './pages/calculators/Sip';
 import ErrorBoundary from './components/external/ErrorBoundary';
 import {devData} from "./devdata.js";
 import getProcessedData from "./utils/dataProcessor";
@@ -136,6 +137,16 @@ function CostPerDayWrapper() {
     );
 }
 
+function SipWrapper() {
+    const context = useContext(AppContext);
+    if (!context) return null;
+    return (
+        <Sip
+            aggregatedData={context.data?.aggregatedData}
+        />
+    );
+}
+
 const routerConfig = [
     {
         path: "/",
@@ -168,6 +179,10 @@ const routerConfig = [
             {
                 path: "calculator/costperday",
                 element: <CostPerDayWrapper />
+            },
+            {
+                path: "calculator/sip",
+                element: <SipWrapper />
             },
         ],
     },

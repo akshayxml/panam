@@ -39,6 +39,12 @@ export const menu = [
                 url: "/calculator/costperday",
                 icon: "_calendar",
             },
+            {
+                id: 4,
+                title: "SIP Calculator",
+                url: "/calculator/sip",
+                icon: "plant",
+            },
         ],
     },
 ];
