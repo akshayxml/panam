@@ -1,35 +1,45 @@
-@import "../variables";
-@import "../responsive";
+@use "../variables";
+@use "../responsive";
 
 .menu-container {
   width: 250px;
   border-right: 2px solid $soft-bg;
   position: relative;
-  transition: transform 0.2s ease-in-out;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; // smoother transition
 
-  @include lg{
+  @include lg {
     width: max-content;
   }
 
   @include md {
-    position: absolute;
+    position: fixed;  // fixed to viewport for overlay effect
     top: 0;
+    left: 0;
     width: 100vw;
     height: 100vh;
     z-index: 1000;
     overflow-y: auto;
+    background-color: rgba(0, 0, 0, 0.3); // optional overlay background for focus
+    opacity: 0;
+    pointer-events: none; // prevent interaction when collapsed
   }
 
   &.expand {
-    @include md{
-      transform: translateX(0px);
+    @include md {
+      transform: translateX(0);
       width: fit-content;
+      opacity: 1;
+      pointer-events: auto;
+      background-color: rgba(0, 0, 0, 0.3); // show overlay only when expanded
     }
   }
 
   &.collapse {
-    @include md{
+    @include md {
       transform: translateX(-100vw);
+      opacity: 0;
+      pointer-events: none;
+      background-color: transparent; // no overlay when collapsed
     }
   }
 }
@@ -60,7 +70,7 @@
       padding: 10px;
       border-radius: 5px;
 
-      .listItemTitle{
+      .listItemTitle {
       }
 
       &:hover {
@@ -72,10 +82,10 @@
       background-color: $soft-bg;
     }
 
-    .menu-icon{
+    .menu-icon {
       height: 20px;
 
-      svg{
+      svg {
         height: 100%;
         width: 100%;
       }

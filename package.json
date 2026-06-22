@@ -2,7 +2,13 @@
   "name": "stonks",
   "version": "1.0.0",
   "description": "A Google Apps Script webapp for managing investments, built with React and Parcel.",
-  "keywords": ["google-apps-script", "react", "parcel", "finance", "stocks"],
+  "keywords": [
+    "google-apps-script",
+    "react",
+    "parcel",
+    "finance",
+    "stocks"
+  ],
   "author": "Akshay M <akshayknr7@gmail.com>",
   "scripts": {
     "dev": "npm run clean && cp -r src/backend/ ./src/appsscript.json ./dist && NODE_ENV=development parcel src/index.html --host 0.0.0.0 --dist-dir dist -p 8000 ",
@@ -15,17 +21,17 @@
     "push:dev": "npm run build:dev && clasp push --project=.beta-clasp.json",
     "push:beta": "npm run build:beta && clasp push --project=.beta-clasp.json",
     "push:prod": "npm run build:prod && clasp push",
-    "deploy:dev": "npm run push:dev && clasp deploy --project=.beta-clasp.json -d dev/demo -i $DEV_DEPLOYMENT_ID", 
-    "deploy:beta": "npm run push:beta && clasp deploy --project=.beta-clasp.json -d beta -i $BETA_DEPLOYMENT_ID", 
+    "deploy:dev": "npm run push:dev && clasp deploy --project=.beta-clasp.json -d dev/demo -i $DEV_DEPLOYMENT_ID",
+    "deploy:beta": "npm run push:beta && clasp deploy --project=.beta-clasp.json -d beta -i $BETA_DEPLOYMENT_ID",
     "deploy:prod": "npm run push:prod && clasp deploy -d prod -i $PROD_DEPLOYMENT_ID",
     "clean": "rm -rf .parcel-cache && rm -rf dist/*"
   },
   "license": "ISC",
   "dependencies": {
-    "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.5",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^5.16.4",
-    "@mui/material": "^5.16.4",
+    "@mui/material": "^5.18.0",
     "@mui/x-data-grid": "^7.9.0",
     "@mui/x-date-pickers": "^7.11.0",
     "dotenv": "^16.4.5",
@@ -52,6 +58,7 @@
     "@types/node": "^20.14.10",
     "nodemon": "^3.1.4",
     "parcel": "^2.12.0",
-    "process": "^0.11.10"
+    "process": "^0.11.10",
+    "rimraf": "^6.0.1"
   }
 }

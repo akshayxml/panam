@@ -1,4 +1,5 @@
-import LogoIcon from "../../public/logo_light.svg";
+import LogoIcon from "./logo.svg";               // string URL
+import { ReactComponent as Logo } from "./logo.svg";  // React component
 import AddIcon from "../../public/add.svg";
 import RefreshIcon from "../../public/refresh.svg";
 import SettingsIcon from "../../public/settings.svg";
@@ -19,7 +20,7 @@ const Navbar = ({   onRefresh,
                 onShowSettings(false)
         }}>
             <div className="logo-box">
-                <LogoIcon className="logo"/>
+<img src={LogoIcon} className="logo" alt="Logo" />
                 <span>
                     Panam
                 </span>
@@ -36,15 +37,11 @@ const Navbar = ({   onRefresh,
             }
             <div className="icons">
                 <div title="Add Transaction">
-                    <AddIcon className="icon" onClick={()=> setDialogType('addTransaction')}/>
-                </div>
+                    <img src={AddIcon} className="icon" onClick={() => setDialogType('addTransaction')} alt="Add" />                </div>
                 <div title="Refresh data">
-                    <RefreshIcon className="icon" onClick={()=> onRefresh()}/>
-                </div>
+                    <img src={RefreshIcon} className="icon" onClick={() => onRefresh()} alt="Refresh" />                </div>
                 <div id="settings-icon" title="Settings">
-                    <SettingsIcon className="icon" onClick={()=> {
-                        onShowSettings(!showSettings)
-                    }}/>
+                    <img src={SettingsIcon} className="icon" onClick={() => onShowSettings(!showSettings)} alt="Settings" />
                 </div>
             </div>
 
