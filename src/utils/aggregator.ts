@@ -40,24 +40,38 @@ function updateMapFIFO(map: any, currentAmount: number, investedAmount: number, 
                 current: currentAmount ? currentAmount : 0
             });
         } else if (investedAmount < 0) {
-            const redemptionCost = -investedAmount;
-            let remainingToRedeem = redemptionCost;
-            while (remainingToRedeem > 0 && map.buyLots.length > 0) {
-                let oldestLot = map.buyLots[0];
-                if (oldestLot.invested <= remainingToRedeem) {
-                    remainingToRedeem -= oldestLot.invested;
-                    map.buyLots.shift();
-                } else {
-                    oldestLot.invested -= remainingToRedeem;
-                    remainingToRedeem = 0;
-                }
-            }
+            // Settled in settleRedemptionsFIFO once all rows are read, so that matching against the oldest
+            // lots does not depend on the order of rows in the sheet.
+            map.pendingRedemption = (map.pendingRedemption || 0) - investedAmount;
         }
     }
 }
 
+function lotTime(lot: any) {
+    const time = (lot.date instanceof Date ? lot.date : new Date(lot.date)).getTime();
+    return Number.isNaN(time) ? Infinity : time;
+}
+
+function settleRedemptionsFIFO(map: any) {
+    if (!map.buyLots) return;
+    map.buyLots.sort((a: any, b: any) => lotTime(a) - lotTime(b));
+    let remainingToRedeem = map.pendingRedemption || 0;
+    while (remainingToRedeem > 0 && map.buyLots.length > 0) {
+        let oldestLot = map.buyLots[0];
+        if (oldestLot.invested <= remainingToRedeem) {
+            remainingToRedeem -= oldestLot.invested;
+            map.buyLots.shift();
+        } else {
+            oldestLot.invested -= remainingToRedeem;
+            remainingToRedeem = 0;
+        }
+    }
+    delete map.pendingRedemption;
+}
+
 function finalizeCashflowsFIFO(map: any, key: string, currentAmount: number, investedAmount: number, calculateXirr: boolean) {
     if (calculateXirr) {
+        settleRedemptionsFIFO(map);
         const cashflows: any[] = [];
         let totalRemainingCurrent = 0;
 
@@ -140,6 +154,7 @@ export function getAggregatedData(transactionsRowMap: any, metadata: any) {
                     for (const nameKey in instrumentsDataMap[k].name) {
                         const nameMap = instrumentsDataMap[k].name[nameKey];
                         if (nameMap.current > 1) {
+                            settleRedemptionsFIFO(nameMap);
                             const remainingLots = nameMap.buyLots ? cloneLots(nameMap.buyLots) : [];
                             
                             // Aggregate to Instrument level active lots
@@ -178,6 +193,7 @@ export function getAggregatedData(transactionsRowMap: any, metadata: any) {
                 } else {
                     // No Name case: instrument itself is the leaf
                     if (calculateXirr && instrumentsDataMap[k].buyLots) {
+                        settleRedemptionsFIFO(instrumentsDataMap[k]);
                         overallActiveLots.push(...cloneLots(instrumentsDataMap[k].buyLots));
                     }
                     finalizeCashflowsFIFO(instrumentsDataMap[k], k, instrumentsDataMap[k].current, instrumentsDataMap[k].invested, calculateXirr);
