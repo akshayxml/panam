@@ -1,5 +1,14 @@
 import getXirr from 'xirr';
 
+// Sheet cells may contain text (e.g. "#N/A" from GOOGLEFINANCE), numeric strings or blanks. Coerce them so
+// totals never turn into string concatenations or NaN.
+function toNumber(value: any): number {
+    const num = typeof value === 'number' ? value
+        : typeof value === 'string' ? parseFloat(value.replace(/,/g, ''))
+        : NaN;
+    return Number.isFinite(num) ? num : 0;
+}
+
 function updateMapTotals(map: any, currentAmount: number, investedAmount: number) {
     map.current += currentAmount ? currentAmount : 0;
     map.invested += investedAmount ? investedAmount : 0;
@@ -99,7 +108,9 @@ export function getAggregatedData(transactionsRowMap: any, metadata: any) {
             const hasName = transactions.some((t: any) => t.Name);
 
             for (const transaction of transactions) {
-                const { Current: currentAmount, Invested: investedAmount, Name: name, Category: category, Date: date } = transaction;
+                const { Name: name, Category: category, Date: date } = transaction;
+                const currentAmount = toNumber(transaction.Current);
+                const investedAmount = toNumber(transaction.Invested);
                 
                 updateMapTotals(overallMap, currentAmount, investedAmount);
 
