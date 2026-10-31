@@ -14,7 +14,7 @@ const DetailsBox = ({aggregatedData, metadata, instruments}) => {
     const [dataSource, setDataSource] = useState("overall")
 
     const overallReturns = overallData.current - overallData.invested;
-    const overallReturnsPerc = overallReturns/overallData.current;
+    const overallReturnsPerc = overallData.invested ? overallReturns/overallData.invested : 0;
 
     const handleDataSourceChange = (value) => {
         if(instruments.includes(value) || value == "overall")

@@ -78,7 +78,7 @@ const InstrumentDetails = ({aggregatedData, metadata, dataSource, onChange}) => 
                                 {formatToIndianCurrency(data[key]["returns"], 0, false)}
                             </div>
                             <div>
-                                {data[key]["current"] && formatPercentage(data[key]["returns"]/data[key]["current"])}
+                                {data[key]["invested"] > 0 ? formatPercentage(data[key]["returns"]/data[key]["invested"]) : '-'}
                             </div>
                         </div> :
                         <div className="instrument-value" onClick={()=> setValueTypeIndex((valueTypeIndex+1)%valuesTypes.length)}>
