@@ -13,8 +13,8 @@ const updateDailyTracker = () =>{
                 if (row.every(cell => cell === "" || cell === null || cell === undefined)) return;
                 row.forEach((value, index) => {
                     const header = headers[index].toLowerCase();
-                    if (header === "current") instrumentCurrentTotal += value;
-                    if (header === "invested") instrumentInvestedTotal += value;
+                    if (header === "current") instrumentCurrentTotal += Number(value) || 0;
+                    if (header === "invested") instrumentInvestedTotal += Number(value) || 0;
                 });
             });
 
