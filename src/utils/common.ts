@@ -33,7 +33,11 @@ const truncateNumber = (number, decimalCount = 2) => {
         const signPrefix = isNegative ? '-' : ''; 
 
         if (absNumber < 1000) {
-            return number.toString(); 
+            // Round to avoid floating point noise (e.g. 0.30000000000000004) while keeping integers short.
+            const rounded = parseFloat(absNumber.toFixed(decimalCount));
+            if (rounded < 1000) {
+                return `${isNegative && rounded !== 0 ? '-' : ''}${rounded}`;
+            }
         }
 
         let value;
@@ -77,12 +81,11 @@ function formatNumberWithLocale(number, symbol = '', decimalCount = 2){
 export function formatToIndianCurrency(number, decimalCount = 2, truncate = true) {
     const symbol = '₹';
     if(typeof number !== "number"){
-        try{
-            number = parseInt(number);
-        }
-        catch (e){
-            console.error(e);
-        }
+        // parseFloat (not parseInt) so numeric strings keep their decimals.
+        number = parseFloat(String(number).replace(/,/g, ''));
+    }
+    if(!Number.isFinite(number)){
+        number = 0;
     }
     let value = number
     try{
