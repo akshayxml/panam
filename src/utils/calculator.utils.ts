@@ -7,63 +7,45 @@ export function getCapitalGainsData(transactionsRowMap, instrument, name,
 
     try{
 
-        let totalUnits = 0, longTermUnits = 0, shortTermUnits = 0, withdrawnUnits = 0, currentNav = 0;
-        let longTermUnitsToBuyNav = [], shortTermUnitsToBuyNav = [];
+        let withdrawnUnits = 0, currentNav = 0;
+        const buyLots = [];
 
         const today = new Date();
         const thresholdDate = new Date(today.setMonth(today.getMonth() - shortTermPeriod));
 
-        transactionsRowMap[instrument].forEach(transaction => {
-            if (transaction.Name === name) {
-                const transactionDate = new Date(transaction.Date);
-                const transactionUnits = transaction[unitsField];
-                currentNav = transaction[currentNavField];
+        transactionsRowMap[instrument]
+            .filter(transaction => transaction.Name === name)
+            .sort((a, b) => new Date(a.Date).getTime() - new Date(b.Date).getTime())
+            .forEach(transaction => {
+                const transactionUnits = Number(transaction[unitsField]) || 0;
+                const nav = Number(transaction[currentNavField]);
+                if (nav > 0) {
+                    currentNav = nav;
+                }
 
                 if (transactionUnits < 0) {
                     withdrawnUnits += -transactionUnits;
-                } else {
-                    totalUnits += transactionUnits;
-                    if (transactionDate < thresholdDate) {
-                        longTermUnits += transactionUnits;
-                        longTermUnitsToBuyNav.push([transactionUnits, transaction[buyNavField]]);
-                    } else {
-                        shortTermUnits += transactionUnits;
-                        shortTermUnitsToBuyNav.push([transactionUnits, transaction[buyNavField]]);
-                    }
+                } else if (transactionUnits > 0) {
+                    buyLots.push({
+                        date: new Date(transaction.Date),
+                        units: transactionUnits,
+                        buyNav: Number(transaction[buyNavField]) || 0,
+                    });
                 }
+            });
+
+        // Withdrawals redeem the oldest units first (FIFO) across long and short term lots, and only once.
+        let longTermValue = 0, shortTermValue = 0;
+        buyLots.forEach(lot => {
+            const redeemedUnits = Math.min(lot.units, withdrawnUnits);
+            withdrawnUnits -= redeemedUnits;
+            const gains = (lot.units - redeemedUnits) * (currentNav - lot.buyNav);
+            if (lot.date < thresholdDate) {
+                longTermValue += gains;
+            } else {
+                shortTermValue += gains;
             }
         });
-
-        // Adjust units considering withdrawals
-        const adjustForWithdrawals = (units, unitsToBuyNav) => {
-            let withdrawnCopy = withdrawnUnits;
-            let totalBuyValue = 0;
-
-            for (let i = 0; i < unitsToBuyNav.length; i++) {
-                let [unit, buyNav] = unitsToBuyNav[i];
-
-                if (withdrawnCopy >= unit) {
-                    withdrawnCopy -= unit;
-                } else {
-                    unit -= withdrawnCopy;
-                    withdrawnCopy = 0;
-                    totalBuyValue += unit * buyNav;
-                }
-            }
-
-            return { remainingUnits: units - withdrawnUnits, totalBuyValue };
-        };
-
-        const longTermAdjustment = adjustForWithdrawals(longTermUnits, longTermUnitsToBuyNav);
-        longTermUnits = longTermAdjustment.remainingUnits;
-        const longTermBuyValue = longTermAdjustment.totalBuyValue;
-
-        const shortTermAdjustment = adjustForWithdrawals(shortTermUnits, shortTermUnitsToBuyNav);
-        shortTermUnits = shortTermAdjustment.remainingUnits;
-        const shortTermBuyValue = shortTermAdjustment.totalBuyValue;
-
-        const longTermValue = longTermUnits * currentNav - longTermBuyValue;
-        const shortTermValue = shortTermUnits * currentNav - shortTermBuyValue;
 
         return [longTermValue, shortTermValue];
     }
