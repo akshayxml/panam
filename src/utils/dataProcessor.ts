@@ -4,6 +4,11 @@ import getXirr from 'xirr';
 const METADATA_PREFIX = '_'
 const REPORTS_PREFIX = '+'
 
+// Rows where every cell is empty (e.g. blank rows left between entries in a sheet) carry no data.
+function isBlankRow(row) {
+    return row.every(cell => cell === '' || cell === null || cell === undefined);
+}
+
 /**
  * Processes data and extracts various maps and instruments.
  *
@@ -28,7 +33,7 @@ function processData(data){
             else {
                 instruments.push(key)
                 const headers = [...data[key][0]];
-                const rows = data[key].slice(1);
+                const rows = data[key].slice(1).filter(row => !isBlankRow(row));
                 headerMap[key] = headers
                 headerMap[key].push("XIRR")
 
@@ -62,7 +67,7 @@ function processData(data){
 
 function convertToJSON(array) {
     const headers = array[0];
-    const rows = array.slice(1);
+    const rows = array.slice(1).filter(row => !isBlankRow(row));
 
     return rows.map(row => {
         let obj = {};
@@ -95,15 +100,10 @@ function getTransactionsColumnMap(data){
     return Object.keys(data).reduce((transactionsMap, key) => {
         if (key[0] !== METADATA_PREFIX && key[0] != REPORTS_PREFIX) {
             const headers = data[key][0]
+            const rows = data[key].slice(1).filter(row => !isBlankRow(row));
             let columnMap = {}
             headers.forEach((header, columnIndex) => {
-                const columnValues = [];
-                let sum = 0;
-                for (let rowIndex = 1; rowIndex < data[key].length; rowIndex++) {
-                    const value = data[key][rowIndex][columnIndex]
-                    columnValues.push(value);
-                }
-                columnMap[header] = columnValues;
+                columnMap[header] = rows.map(row => row[columnIndex]);
             });
             transactionsMap[key] = columnMap
         }
