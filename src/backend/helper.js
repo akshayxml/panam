@@ -13,8 +13,11 @@ const updateDailyTracker = () =>{
                 if (row.every(cell => cell === "" || cell === null || cell === undefined)) return;
                 row.forEach((value, index) => {
                     const header = headers[index].toLowerCase();
-                    if (header === "current") instrumentCurrentTotal += Number(value) || 0;
-                    if (header === "invested") instrumentInvestedTotal += Number(value) || 0;
+                    // Blank cells count as 0, but text/error cells (e.g. #N/A) yield NaN so the daily total
+                    // shows up as NA and can be fixed, instead of silently dropping the missing value.
+                    const num = (value === "" || value === null || value === undefined) ? 0 : Number(value);
+                    if (header === "current") instrumentCurrentTotal += num;
+                    if (header === "invested") instrumentInvestedTotal += num;
                 });
             });
 
@@ -26,8 +29,8 @@ const updateDailyTracker = () =>{
     let outputSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(DAILY_TRACKER_SHEETNAME);
     let lastRow = outputSheet.getLastRow();
     outputSheet.getRange(lastRow + 1, 1).setValue(new Date());
-    outputSheet.getRange(lastRow + 1, 2).setValue(investedTotal);
-    outputSheet.getRange(lastRow + 1, 3).setValue(currentTotal);
+    outputSheet.getRange(lastRow + 1, 2).setValue(Number.isFinite(investedTotal) ? investedTotal : "NA");
+    outputSheet.getRange(lastRow + 1, 3).setValue(Number.isFinite(currentTotal) ? currentTotal : "NA");
 }
 
 function updateInstrumentMetadata(data, sheet){
