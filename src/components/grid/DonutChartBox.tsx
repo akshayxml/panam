@@ -11,6 +11,7 @@ const DonutChartBox = ({aggregatedData, metadata}) => {
         return <div></div>
     let [_, instrumentsData] = aggregatedData
     const [data, setData] = useState([])
+    const [legendData, setLegendData] = useState([])
     const [dataSource, setDataSource] = useState('overall')
     const [showRadio, setShowRadio] = useState(false)
     const [radioValue, setRadioValue] = useState('name')
@@ -43,7 +44,9 @@ const DonutChartBox = ({aggregatedData, metadata}) => {
             }
         }
 
-        setData(convertToDountChartData(requiredData, "current", MAX_ITEMS));
+        const {chartData, legendData} = convertToDountChartData(requiredData, "current", MAX_ITEMS);
+        setData(chartData);
+        setLegendData(legendData);
     }
 
     const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -156,7 +159,7 @@ const DonutChartBox = ({aggregatedData, metadata}) => {
                         <Tooltip content={CustomTooltip} />
                     </PieChart>
                 </ResponsiveContainer>
-                <CustomLegend payload={data}/>
+                <CustomLegend payload={legendData}/>
             </div>
         </>
     )

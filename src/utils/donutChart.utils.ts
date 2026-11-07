@@ -25,19 +25,26 @@ function convertToDountChartData(aggregatedData, column, itemLimit) {
             return acc;
         }, {name: 'Others', value: 0, perc: 0});
 
-        if (sortedData.length > itemLimit) {
-            sortedData.splice(itemLimit - 1)
-            sortedData.push(others);
+        // Full list for the legend; items beyond the limit share the "Others" color.
+        const legendData = sortedData.map((item, i) => ({
+            ...item,
+            fill: colors[Math.min(i, itemLimit - 1)],
+        }));
+
+        const chartData: Array<{name: string, value: number, perc: number, fill?: string}> = sortedData.slice();
+        if (chartData.length > itemLimit) {
+            chartData.splice(itemLimit - 1)
+            chartData.push(others);
         }
-        for(let i=0; i<sortedData.length; i++){
-            sortedData[i]["fill"] = colors[i]
+        for(let i=0; i<chartData.length; i++){
+            chartData[i] = {...chartData[i], fill: colors[i]}
         }
 
-        return sortedData
+        return {chartData, legendData}
     }
     catch(e){
         console.error(e);
-        return []
+        return {chartData: [], legendData: []}
     }
 }
 
